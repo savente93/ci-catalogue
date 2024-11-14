@@ -131,3 +131,8 @@ repos:
     rev: v1.27.3
     hooks:
       - id: typos
+  - repo: https://github.com/FlamingTempura/bibtex-tidy
+    rev: v1.14.0 
+    hooks:
+    -   id: bibtex-tidy
+        args: ['--align=100', '--curly']
