@@ -1,0 +1,133 @@
+repos:
+  ## Common
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-ast
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-shebang-scripts-are-executable
+      - id: check-symlinks
+      - id: check-toml
+      - id: check-yaml
+      - id: debug-statements
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: pretty-format-json
+      - id: trailing-whitespace
+
+  # shell
+  - repo: https://github.com/scop/pre-commit-shfmt
+    rev: v3.7.0-4
+    hooks:
+      - id: shfmt
+  
+  # lua
+  - repo: https://github.com/JohnnyMorganz/StyLua
+    rev: v0.20.0
+    hooks:
+      - id: stylua 
+
+  # security
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.2
+    hooks:
+      - id: gitleaks-system
+
+  # Python
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.5.5
+    hooks:
+      - id: ruff
+        args: ["--fix", --exit-non-zero-on-fix]
+      - id: ruff-format
+
+  # rust 
+  - repo: https://github.com/doublify/pre-commit-rust
+    rev: v1.0
+    hooks:
+      - id: fmt
+      - id: cargo-check
+      - id: clippy
+
+  # config 
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.24.0
+    hooks:
+      - id: check-github-workflows
+      - id: check-github-actions
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.29.0
+    hooks:
+      - id: yamllint
+        args: [--strict, -c=/path/to/.yamllint]  
+
+  # golang
+  -   repo: https://github.com/tekwizely/pre-commit-golang
+      rev: master
+      hooks:
+      -   id: go-build-mod
+      -   id: go-mod-tidy
+      -   id: go-vet
+      -   id: go-sec-repo-pkg
+      -   id: go-staticcheck-repo-pkg
+      -   id: go-structslop-repo-pkg
+      -   id: go-fmt
+      -   id: go-fmt-repo
+      -   id: go-lint
+      -   id: go-critic
+
+  # web
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v4.0.0-alpha.8
+    hooks:
+      - id: prettier
+        args: [--config, site/.prettierrc.yml, --write] # edit files in-place
+        additional_dependencies:
+          - prettier
+          - prettier-plugin-svelte
+          - svelte
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v9.10.0
+    hooks:
+      - id: eslint
+        types: [file]
+        args: [--fix, --config, site/eslint.config.js]
+        files: \.(js|ts|svelte)$
+        additional_dependencies:
+          - eslint
+          - eslint-plugin-svelte
+          - svelte
+          - typescript
+          - typescript-eslint
+          
+  - repo: https://github.com/shssoichiro/oxipng
+    rev: v9.0.0
+    hooks:
+      - id: oxipng
+        args: ["-o", "4", "--strip", "safe", "--alpha"]
+
+  # writing
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.41.0
+    hooks:
+      - id: markdownlint
+        args: ['--']
+ 
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.4
+    hooks:
+      - id: actionlint
+  - repo: https://github.com/PrincetonUniversity/blocklint
+    rev: v0.2.4
+    hooks:
+      - id: blocklint
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.27.3
+    hooks:
+      - id: typos
