@@ -143,3 +143,8 @@ repos:
       - id: terraform_tflint
       - id: terraform_validate
       - id: terraform_tfsec
+  - repo: https://github.com/djlint/djLint.git
+    rev: v1.34.1
+    hooks:
+      - id: djlint-reformat-jinja
+      - id: djlint-jinja
