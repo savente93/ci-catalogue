@@ -1,22 +1,38 @@
-name: cleanup all caches
-on:
-  workflow_dispatch:
-  workflow_call:
+name: Linting PR description
 
+on:
+  pull_request:
+    types: [opened, reopened, edited]
 
 jobs:
-  cleanup:
+  lint-description:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Cleanup caches
+      - uses: actions/checkout@v4
+      - name: restore cache
+        id: cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/.cargo/bin
+          key: commitlint
+      - name: install rust
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+            cache: false
+      - name: compile binary
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          if gh cache list | grep -vq "No cache"; then
-            gh cache delete -a
-          else
-            echo "No caches found. skipping..."
-          fi
+          cargo install commitlint-rs
+      - uses: actions/cache/save@v4
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          key: commitlint
+          path: ~/.cargo/bin
+      - name: Lint message
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            PR_NUMBER: ${{ github.event.number }}
+            GH_TOKEN: ${{ github.token }}
+        run: |
+            gh pr view $PR_NUMBER --json title,body --jq ".title,.body" > lint-message.txt
+            commitlint --edit lint-message.txt
